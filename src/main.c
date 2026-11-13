@@ -7,8 +7,8 @@
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ PWSTR pCmdLine, _In_ int nCmdShow) {
 
-	FILE* file;
-	if (!(file = fopen("sample.bmp", "rb"))) {
+	FILE* file = NULL;
+	if (fopen_s(&file, "sample.bmp", "rb") != 0) {
 		return 1;
 	}
 
@@ -33,6 +33,21 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 		fclose(file);
 		return 1;
 	}
+
+	BITMAP_INFO_HEADER bitmap_info_header = { 0 };
+	fread(&bitmap_info_header, sizeof(BITMAP_INFO_HEADER), 1, file);
+	_snwprintf_s(
+		buf,
+		_countof(buf),
+		_TRUNCATE,
+		L"  Header size: %u\n  width: %u\n  height: %u\n  bit per px: %u\n  Now offset: %u\n",
+		bitmap_info_header.size,
+		bitmap_info_header.width,
+		bitmap_info_header.height,
+		bitmap_info_header.bit_count,
+		ftell(file)
+	);
+	OutputDebugStringW(buf);
 
 	MessageBoxW(NULL, L"Success loaded bitmap", L"Success", MB_ICONINFORMATION | MB_OK);
 
