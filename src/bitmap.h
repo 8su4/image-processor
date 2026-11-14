@@ -3,6 +3,7 @@
 // 参考: https://learn.microsoft.com/ja-jp/windows/win32/gdi/bitmap-storage
 // 　　  https://ja.wikipedia.org/wiki/Windows_bitmap
 
+// リトルエンディアン環境を想定
 const uint16_t BITMAP_MAGIC_NUMBER = 0x4d42;
 
 #pragma pack(push, 2)		// アラインメント処理を2バイト単位に変更
